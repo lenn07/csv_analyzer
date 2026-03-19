@@ -3,10 +3,11 @@ def extract_column(table, column):
     columnList = []
     for row in table:
         if count != 0:
-            if(isinstance(row[column], str)):
-                columnList.append(row[column])
-            else:
-                columnList.append(float(row[column]))
+            try:
+                dataInFloat = float(row[column])
+            except ValueError:
+                dataInFloat = row[column]
+            columnList.append(dataInFloat)
         count+=1
 
     return columnList

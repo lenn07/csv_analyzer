@@ -29,3 +29,52 @@ def median(table: list, column : int):
     else:
         return float(columnList[middle])
 
+def min(table: list, column : int):
+
+    if(errorHandling(table, column) != "NO ERROR"):
+        return errorHandling(table, column)
+
+    columnList = extract_column(table, column)
+    minA = columnList[0]
+    for element in columnList:
+        if element < minA:
+            minA = element
+
+    return minA
+
+def max(table: list, column : int):
+
+    if(errorHandling(table, column) != "NO ERROR"):
+        return errorHandling(table, column)
+
+    columnList = extract_column(table, column)
+    maxA = columnList[0]
+    for element in columnList:
+        if element > maxA:
+            maxA = element
+
+    return maxA
+
+def count(table: list, column : int):
+
+    if(errorHandling(table, column) != "NO ERROR"):
+        return errorHandling(table, column)
+
+    columnList = extract_column(table, column)
+    count = 0
+    for element in columnList:
+        count+=1
+
+    return count
+
+def sum(table: list, column : int):
+
+    if(errorHandling(table, column) != "NO ERROR"):
+        return errorHandling(table, column)
+
+    columnList = extract_column(table, column)
+    sum = 0
+    for element in columnList:
+        sum+=element
+
+    return sum
