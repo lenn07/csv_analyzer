@@ -1,6 +1,6 @@
-from csv_analyzer import load_csv
-from csv_analyzer import average
-from csv_analyzer import median    
+from csv_analyzer.loader import load_csv
+from csv_analyzer.stats import average
+from csv_analyzer.stats import median    
 
 path1 = "data/student_performance_prediction_dataset-2.csv"
 
