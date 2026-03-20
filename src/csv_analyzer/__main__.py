@@ -1,16 +1,36 @@
 import argparse
-from unittest import result
+import json
 from csv_analyzer import load_csv
 from csv_analyzer import average
 from csv_analyzer import median
-from csv_analyzer import min
-from csv_analyzer import max
+from csv_analyzer import min as csv_min
+from csv_analyzer import max as csv_max
 from csv_analyzer import count
-from csv_analyzer import sum
+from csv_analyzer import sum as csv_sum
 from csv_analyzer import mode
 from csv_analyzer import variance
 from csv_analyzer import std_dev
 from csv_analyzer.transform import headerToIndex
+
+
+def format_text(results):
+    if len(results) == 1:
+        return str(next(iter(results.values())))
+
+    lines = []
+    for key, value in results.items():
+        lines.append(f"{key}: {value}")
+    return "\n".join(lines)
+
+
+def format_json(results):
+    return json.dumps(results, indent=2, ensure_ascii=False)
+
+
+def render_output(results, output_format):
+    if output_format == "json":
+        return format_json(results)
+    return format_text(results)
 
 
 def main():
@@ -31,48 +51,40 @@ def main():
     group.add_argument("--std-dev", action="store_true")
     group.add_argument("--all", action="store_true")
 
+    parser.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text"
+    )
+
     args = parser.parse_args()
 
     table = load_csv(args.file)
+    column_index = headerToIndex(table, args.column)
 
-    args.column = headerToIndex(table, args.column)
+    results = {}
 
-    if args.average:
-        result = average(table, args.column)
-    elif args.median:
-        result = median(table, args.column)
-    elif args.min:
-        result = min(table, args.column)
-    elif args.max:
-        result = max(table, args.column)
-    elif args.sum:
-        result = sum(table, args.column)
-    elif args.count:
-        result = count(table, args.column)
-    elif args.mode:
-        result = mode(table, args.column)
-    elif args.variance:
-        result = variance(table, args.column)
-    elif args.std_dev:
-        result = std_dev(table, args.column)
-    elif args.all:
-        result = {
-            "average": average(table, args.column),
-            "median": median(table, args.column),
-            "min": min(table, args.column),
-            "max": max(table, args.column),
-            "sum": sum(table, args.column),
-            "count": count(table, args.column),
-            "mode": mode(table, args.column),
-            "variance": variance(table, args.column),
-            "std_dev": std_dev(table, args.column),
-        }
+    if args.all or args.average:
+        results["average"] = average(table, column_index)
+    if args.all or args.median:
+        results["median"] = median(table, column_index)
+    if args.all or args.min:
+        results["min"] = csv_min(table, column_index)
+    if args.all or args.max:
+        results["max"] = csv_max(table, column_index)
+    if args.all or args.sum:
+        results["sum"] = csv_sum(table, column_index)
+    if args.all or args.count:
+        results["count"] = count(table, column_index)
+    if args.all or args.mode:
+        results["mode"] = mode(table, column_index)
+    if args.all or args.variance:
+        results["variance"] = variance(table, column_index)
+    if args.all or args.std_dev:
+        results["std_dev"] = std_dev(table, column_index)
 
-    if isinstance(result, dict):
-        for key, value in result.items():
-            print(f"{key}: {value}")
-    else:
-        print(result)       
+    print(render_output(results, args.format))
+
 
 if __name__ == "__main__":
     main()
