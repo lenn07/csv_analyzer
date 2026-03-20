@@ -8,7 +8,7 @@ def errorHandling(table, column, needsToBeNumeric):
     if(not isinstance(column, int)):
         return "ERROR - COLUMN NEEDS TO BE A INT"
     if(column>=len(table[0]) or column<0):
-        return "ERROR - COLUMN OUT OF RANGE FOR TABLE"
+        return "ERROR - COLUMN DOESN'T EXIST"
     if(len(table)==1):
         return "ERROR - TABLE HAS NO COLUMNS(WE ASSUME THE FIRST ROW IS A HEADER)"
     

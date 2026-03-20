@@ -9,6 +9,7 @@ from csv_analyzer import sum
 from csv_analyzer import mode
 from csv_analyzer import variance
 from csv_analyzer import std_dev
+from csv_analyzer.transform import headerToIndex
 
 
 def main():
@@ -31,6 +32,8 @@ def main():
     args = parser.parse_args()
 
     table = load_csv(args.file)
+
+    args.column = headerToIndex(table, args.column)
 
     if args.average:
         result = average(table, args.column)

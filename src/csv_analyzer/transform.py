@@ -11,3 +11,13 @@ def extract_column(table, column):
         count+=1
 
     return columnList
+
+def headerToIndex(table, column):
+    count = 0
+    if(column.isdigit()):
+        return int(column)
+    for element in table[0]:
+        if element == column:
+            return count
+        count+=1
+    return -1
