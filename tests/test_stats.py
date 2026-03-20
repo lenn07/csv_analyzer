@@ -1,6 +1,6 @@
 import pytest
 
-from csv_analyzer.stats import average, count, max, median, min, sum
+from csv_analyzer.stats import average, count, max, median, min, sum, mode, variance, std_dev
 
 
 class TestStats:
@@ -42,12 +42,21 @@ class TestStats:
     def test_sum_returns_total_of_column(self):
         assert sum([["Header"], [4], [1], [3]], 0) == 8.0
 
-    @pytest.mark.parametrize("stat_func", [average, median, min, max, sum])
+    def test_mode_returns_most_frequent_value(self):
+        assert mode([["Header"], [1], [2], [2], [3]], 0) == 2.0
+
+    def test_variance_returns_population_variance(self):
+        assert variance([["Header"], [1], [2], [3]], 0) == pytest.approx(0.6666666666666666)
+
+    def test_std_dev_returns_standard_deviation(self):
+        assert std_dev([["Header"], [1], [2], [3]], 0) == pytest.approx(0.816496580927726)
+
+    @pytest.mark.parametrize("stat_func", [average, median, min, max, sum, variance, std_dev])
     def test_all_functions_return_error_for_non_numeric_column(self, stat_func):
         table = [["Header"], ["abc"], [2]]
         assert stat_func(table, 0) == "ERROR - COLUMN CONTAINS NON NUMERIC VALUES"
 
-    @pytest.mark.parametrize("stat_func", [average, median, min, max, count, sum])
+    @pytest.mark.parametrize("stat_func", [average, median, min, max, count, sum, mode, variance, std_dev])
     def test_all_functions_return_error_when_table_has_only_header(self, stat_func):
         table = [["Header"]]
         assert stat_func(table, 0) == "ERROR - TABLE HAS NO COLUMNS(WE ASSUME THE FIRST ROW IS A HEADER)"
