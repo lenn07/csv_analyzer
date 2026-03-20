@@ -1,6 +1,6 @@
 from csv_analyzer.transform import extract_column
 
-def errorHandling(table, column):
+def errorHandling(table, column, needsToBeNumeric):
     if(not table):
         return "ERROR - EMPTY TABLE"
     if(not isinstance(table,list)):
@@ -14,7 +14,7 @@ def errorHandling(table, column):
     
     columnList = extract_column(table, column)
     for element in columnList:
-        if(not isinstance(element, float)):
+        if(not isinstance(element, float) and needsToBeNumeric):
             return "ERROR - COLUMN CONTAINS NON NUMERIC VALUES"
       
     return "NO ERROR"

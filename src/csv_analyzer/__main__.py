@@ -6,13 +6,16 @@ from csv_analyzer import min
 from csv_analyzer import max
 from csv_analyzer import count
 from csv_analyzer import sum
+from csv_analyzer import mode
+from csv_analyzer import variance
+from csv_analyzer import std_dev
 
 
 def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("file")
-    parser.add_argument("column", type=int)
+    parser.add_argument("column")
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--average", action="store_true")
@@ -21,6 +24,9 @@ def main():
     group.add_argument("--max", action="store_true")
     group.add_argument("--sum", action="store_true")
     group.add_argument("--count", action="store_true")
+    group.add_argument("--mode", action="store_true")
+    group.add_argument("--variance", action="store_true")
+    group.add_argument("--std-dev", action="store_true")
 
     args = parser.parse_args()
 
@@ -38,6 +44,12 @@ def main():
         result = sum(table, args.column)
     elif args.count:
         result = count(table, args.column)
+    elif args.mode:
+        result = mode(table, args.column)
+    elif args.variance:
+        result = variance(table, args.column)
+    elif args.std_dev:
+        result = std_dev(table, args.column)
 
     print(result)
 
