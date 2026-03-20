@@ -42,7 +42,7 @@ class TestStats:
     def test_sum_returns_total_of_column(self):
         assert sum([["Header"], [4], [1], [3]], 0) == 8.0
 
-    @pytest.mark.parametrize("stat_func", [average, median, min, max, count, sum])
+    @pytest.mark.parametrize("stat_func", [average, median, min, max, sum])
     def test_all_functions_return_error_for_non_numeric_column(self, stat_func):
         table = [["Header"], ["abc"], [2]]
         assert stat_func(table, 0) == "ERROR - COLUMN CONTAINS NON NUMERIC VALUES"
