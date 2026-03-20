@@ -21,3 +21,17 @@ def headerToIndex(table, column):
             return count
         count+=1
     return -1
+
+def extractIndexOfNumericColumn(table):
+    indecies = []
+    count = 0
+    for element in table[0]:
+        columnList = extract_column(table, count)
+        isNumeric = True
+        for element in columnList:
+            if(not isinstance(element, float)):
+                isNumeric = False
+        if(isNumeric):
+            indecies.append(count)
+        count+=1
+    return indecies
