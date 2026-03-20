@@ -1,4 +1,5 @@
 import argparse
+from unittest import result
 from csv_analyzer import load_csv
 from csv_analyzer import average
 from csv_analyzer import median
@@ -28,6 +29,7 @@ def main():
     group.add_argument("--mode", action="store_true")
     group.add_argument("--variance", action="store_true")
     group.add_argument("--std-dev", action="store_true")
+    group.add_argument("--all", action="store_true")
 
     args = parser.parse_args()
 
@@ -53,8 +55,24 @@ def main():
         result = variance(table, args.column)
     elif args.std_dev:
         result = std_dev(table, args.column)
+    elif args.all:
+        result = {
+            "average": average(table, args.column),
+            "median": median(table, args.column),
+            "min": min(table, args.column),
+            "max": max(table, args.column),
+            "sum": sum(table, args.column),
+            "count": count(table, args.column),
+            "mode": mode(table, args.column),
+            "variance": variance(table, args.column),
+            "std_dev": std_dev(table, args.column),
+        }
 
-    print(result)
+    if isinstance(result, dict):
+        for key, value in result.items():
+            print(f"{key}: {value}")
+    else:
+        print(result)       
 
 if __name__ == "__main__":
     main()
