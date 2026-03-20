@@ -1,6 +1,6 @@
 # CSV Analyzer
 
-Ein einfaches Python-Tool zur Berechnung von statistischen Kennzahlen.
+Ein einfaches Python-Tool zur Berechnung von statistischen Kennzahlen aus CSV-Daten.
 
 ---
 
@@ -8,6 +8,14 @@ Ein einfaches Python-Tool zur Berechnung von statistischen Kennzahlen.
 
 * Durchschnitt berechnen (`average`)
 * Median berechnen (`median`)
+* Minimum berechnen (`min`)
+* Maximum berechnen (`max`)
+* Anzahl der Werte zählen (`count`)
+* Summe berechnen (`sum`)
+* Modus (häufigster Wert) berechnen (`mode`)
+* Varianz berechnen (`variance`)
+* Standardabweichung berechnen (`std_dev`)
+* CSV-Dateien laden (`load_csv`)
 
 ---
 
@@ -45,18 +53,43 @@ pip install -e .
 
 Die öffentliche API besteht aus:
 
+* `load_csv`
 * `average`
 * `median`
+* `min`
+* `max`
+* `count`
+* `sum`
+* `mode`
+* `variance`
+* `std_dev`
 
 ### Beispiel
 
 ```python
-from csv_analyzer import average, median
+from csv_analyzer import load_csv, average, median, min, max, count, sum, mode, variance, std_dev
 
-numbers = [[1], [2], [3], [4]]
+# CSV laden
+table = load_csv("data.csv")
 
-print(average(numbers), 0)  # 2.5
-print(median(numbers), 0)   # 2.5
+# Statistiken berechnen (Spalte 0)
+print("Average:", average(table, 0))
+print("Median:", median(table, 0))
+print("Min:", min(table, 0))
+print("Max:", max(table, 0))
+print("Count:", count(table, 0))
+print("Sum:", sum(table, 0))
+print("Mode:", mode(table, 0))
+print("Variance:", variance(table, 0))
+print("Std Dev:", std_dev(table, 0))
+```
+
+### CLI-Nutzung
+
+Das Paket kann auch als Kommandozeilen-Tool verwendet werden:
+
+```bash
+python -m csv_analyzer
 ```
 
 ---
@@ -64,6 +97,8 @@ print(median(numbers), 0)   # 2.5
 ## Verhalten / Edge Cases
 
 * Es werden keine Errors geworfen sondern lediglich eine Errormeldung in Form eines Strings.
+* Die erste Zeile der Tabelle wird als Header behandelt.
+* Spalten werden über Index angesprochen (0-basiert).
 
 ## Tests
 
@@ -82,13 +117,14 @@ csv_analyzer/
 │
 ├── __init__.py
 ├── __main__.py      # CLI
-├── stats.py
-├── loader.py        # interne Hilfsfunktionen
-├── transform.py     # interne Hilfsfunktionen
-└── validation.py    # interne Hilfsfunktionen
+├── loader.py        # CSV-Loading-Funktionen
+├── stats.py         # Statistische Berechnungen
+├── transform.py     # Daten-Transformationen
+└── validation.py    # Validierungsfunktionen
 tests/
 ├── test_stats.py
-└── test_loader.py
+data/
+└── student_performance_prediction_dataset-2.csv
 ```
 
 ---
@@ -96,8 +132,6 @@ tests/
 ## Hinweis
 
 Die Funktionen in `loader.py`, `transform.py` und `validation.py` sind interne Implementierungsdetails und nicht Teil der öffentlichen API.
-
----
 
 ## Ziel des Projekts
 
